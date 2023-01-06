@@ -21,10 +21,10 @@ app.post('/', async (req, res) => {
                 // const meaning1 = response.data[0].meanings[0].definitions[0]?.definition;
                 // const meaning2 = response.data[0].meanings[0].definitions[1]?.definition;
 
-                const meaning = response.data[0].meanings[0].definitions;
+                const meaning = response.data[0]?.meanings[0]?.definitions;
 
                 res.status(200).send({
-                    m: meaning
+                    m: meaning ? meaning : null,
                 });
             })
 
