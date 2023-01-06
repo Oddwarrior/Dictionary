@@ -25,6 +25,7 @@ const handleSubmit = async (e) => {
         // console.log(m);
         loadMeaningOnDiv(m);
     }
+
 }
 
 const loadMeaningOnDiv = async (definitions) => {

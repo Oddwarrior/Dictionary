@@ -81,7 +81,7 @@ li {
   margin: 4px;
 }
 
-@media (min-widhth : 450px) {
+@media (max-width : 450px) {
 
   .from-container {
     width: 100%;
