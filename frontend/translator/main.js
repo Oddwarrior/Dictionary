@@ -22,8 +22,9 @@ const handleSubmit = async (e) => {
 
     if (response.ok) {
         const res = await response.json()
-        const { m } = res;
-        loadMeaningOnDiv(m);
+        console.log(res);
+        const { definition, partOfSpeech } = res;
+        loadMeaningOnDiv(definition, partOfSpeech);
 
     } else {
         loadMeaningNotFound();
@@ -32,12 +33,15 @@ const handleSubmit = async (e) => {
 }
 const loadMeaningNotFound = async () => {
     const meaningDiv = document.getElementById("answer");
+    meaningDiv.style.display = "revert";
     meaningDiv.innerHTML = "Sorry pal, we couldn't find definitions for the word you were looking for";
 }
 
-const loadMeaningOnDiv = async (definitions) => {
+const loadMeaningOnDiv = async (definitions, partOfSpeech) => {
     const meaningDiv = document.getElementById("answer");
-    meaningDiv.innerHTML = `Meaning : <br />`;
+    meaningDiv.style.display = "revert";
+    meaningDiv.innerHTML = `<strong> Part of Speech :</strong>  ${partOfSpeech} <br />
+    <strong>Meaning</strong> : <br />`;
 
     for (let i = 0; i < 2; i++) {
         const { definition } = definitions[i];

@@ -1,4 +1,5 @@
 :root {
+  margin: 0;
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 24px;
@@ -31,8 +32,8 @@ form {
 .from-container {
   background-color: rgb(255, 255, 255);
   /* border: 1px solid gray; */
-  width: 500px;
-  min-height: 256px;
+  max-width: 400px;
+  min-height: 150px;
   padding: 32px;
   margin: auto;
   border-radius: 10px;
@@ -46,7 +47,7 @@ input {
   background: rgb(232, 230, 230);
   font-size: medium;
   border-radius: 4px;
-  padding: 8px;
+  padding: 16px;
   margin: 4px;
 }
 
@@ -55,13 +56,14 @@ input:focus {
 }
 
 #answer {
+  display: none;
   background: rgb(232, 230, 230);
   margin: 4px;
   margin-top: 16px;
   font-size: medium;
   border-radius: 4px;
   min-height: 70px;
-  padding: 8px;
+  padding: 16px;
 }
 
 button {
@@ -81,9 +83,10 @@ li {
   margin: 4px;
 }
 
-@media (max-width : 450px) {
+@media (max-width : 500px) {
 
   .from-container {
+    margin: 8px;
     width: 100%;
   }
 }
