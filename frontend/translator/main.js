@@ -9,7 +9,8 @@ const handleSubmit = async (e) => {
     console.log("data collected" + text);
     // form.reset();
 
-    const response = await fetch('http://localhost:3000', {
+    //server link : https://word-nco2.onrender.com | http://localhost:3000
+    const response = await fetch('https://word-nco2.onrender.com', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
