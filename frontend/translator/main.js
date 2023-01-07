@@ -21,11 +21,18 @@ const handleSubmit = async (e) => {
 
 
     if (response.ok) {
-        const { m } = await response.json()
-        // console.log(m);
+        const res = await response.json()
+        const { m } = res;
         loadMeaningOnDiv(m);
+
+    } else {
+        loadMeaningNotFound();
     }
 
+}
+const loadMeaningNotFound = async () => {
+    const meaningDiv = document.getElementById("answer");
+    meaningDiv.innerHTML = "Sorry pal, we couldn't find definitions for the word you were looking for";
 }
 
 const loadMeaningOnDiv = async (definitions) => {

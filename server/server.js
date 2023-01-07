@@ -16,20 +16,13 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const text = req.body.text;
-        axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
-            .then((response) => {
-                // const meaning1 = response.data[0].meanings[0].definitions[0]?.definition;
-                // const meaning2 = response.data[0].meanings[0].definitions[1]?.definition;
+        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
 
-                const meaning = response.data[0]?.meanings[0]?.definitions;
-
-                res.status(200).send({
-                    m: meaning ? meaning : null,
-                });
-            })
-
+        const meaning = response.data[0]?.meanings[0]?.definitions;
+        res.status(200).send({
+            m: meaning ? meaning : null,
+        })
         // res.status(200).send(response);
-
     } catch (error) {
         console.log(error);
         res.status(500).send({ error });
