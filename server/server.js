@@ -16,8 +16,8 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const text = req.body.text;
-        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
 
+        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
         const meaning = response.data[0]?.meanings[0];
         res.status(200).send({
             definition: meaning.definitions,
