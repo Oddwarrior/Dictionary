@@ -16,6 +16,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const text = req.body.text;
+        if (text.length == 0) return res.status(500).send({ message: "Please enter a valid word" });
 
         const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
         const meaning = response.data[0]?.meanings[0];
