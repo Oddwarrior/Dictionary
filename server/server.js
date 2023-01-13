@@ -2,10 +2,16 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const cors = require('cors');
+const userRoutes = require('./routes/user');
 
 app.use(express.json());
 app.use(cors());
 
+//signup
+app.use("/user", userRoutes);
+app.use(express.urlencoded({ extended: false }));
+
+// Base url
 app.get('/', async (req, res) => {
 
     res.status(200).send({
@@ -16,6 +22,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const text = req.body.text;
+
         if (text.length == 0) return res.status(500).send({ message: "Please enter a valid word" });
 
         const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
@@ -24,7 +31,7 @@ app.post('/', async (req, res) => {
             definition: meaning.definitions,
             partOfSpeech: meaning.partOfSpeech,
         })
-        // res.status(200).send(response);
+
     } catch (error) {
         console.log(error);
         res.status(500).send({ message: "Sorry pal, we couldn't find definitions for the word you were looking for." })
