@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
 const userDetailsSchema = new mongoose.Schema({
-    username: String,
-    email: String,
+    fname: String,
+    lname: String,
+    email: { type: String, unique: true },
     phone: String,
-    password: String
+    password: String,
 }, {
-    collation: "userInfo"
+    collection: "userInfo"
 });
 
 mongoose.model("userInfo", userDetailsSchema);

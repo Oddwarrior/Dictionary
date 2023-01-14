@@ -6,6 +6,7 @@ let router = express.Router();
 const bcrypt = require("bcrypt");
 
 const { default: mongoose } = require("mongoose");
+const validators = require("../middlevares/validators");
 
 //mongo db connection
 const MONGO_URL = process.env.MONGO_URL;
@@ -18,17 +19,28 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true }).then(() => {
 require("../schema/user-details");
 const user = mongoose.model("userInfo");
 
-router.post("/signup", async (req, res) => {
-    const { name, email, mobile } = req.body;
+router.post("/signup", validators, async (req, res) => {
+    const { fname, lname, email, mobile, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     try {
+        const oldUser = await user.findOne({ email });
+        if (oldUser) {
+            return res.send({ error: "User already exists" });
+        }
         await user.create({
-            username: name,
+            fname,
+            lname,
             email,
             phone: mobile,
+            password: hashedPassword,
+            words: {}
         })
-        res.status(200).send({ status: ok });
+        return res.status(200).send({ status: "ok" });
+
     } catch (error) {
-        res.send(error);
+        console.log(error);
+        res.status(500).send(error);
     }
 
 });
