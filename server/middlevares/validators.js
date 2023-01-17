@@ -14,7 +14,7 @@ const validators = (req, res, next) => {
 
     // Check if password is valid
     if (!passwordRegex.test(password)) {
-        return res.status(400).send({ error: "Invalid password.\\n Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character" });
+        return res.status(400).send({ error: "Invalid password. Password must have at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character" });
     }
 
     next();
