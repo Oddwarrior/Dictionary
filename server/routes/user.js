@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 
 const { default: mongoose } = require("mongoose");
 const validators = require("../middlevares/validators");
+const jwtVerify = require("../middlevares/jwtVerify")
 
 //mongo db connection
 const MONGO_URL = process.env.MONGO_URL;
@@ -34,7 +35,6 @@ router.post("/signup", validators, async (req, res) => {
             email,
             phone: mobile,
             password: hashedPassword,
-            words: {}
         })
         return res.status(200).send({ status: "ok", message: "user registation successful !" });
 
@@ -63,15 +63,59 @@ router.post("/signin", async (req, res) => {
             return res.status(404).send({ error: "email or password missmatched" });
         }
 
-        const payload = { user: { id: existingUser.id, email } }
-        const bearerToken = jwt.sign(payload, JWT_SECRET, { expiresIn: 86400 });
-        console.log(existingUser);
+        const id = existingUser.id;
+        const payload = { user: { id, email, fname: existingUser.fname, lname: existingUser.lname } };
 
-        return res.status(200).send({ status: "ok", token: `${bearerToken}`, message: "user login successful !" });
+        const bearerToken = jwt.sign({ id }, JWT_SECRET, { expiresIn: '10d' });
+        return res.status(200).send({ status: "ok", message: "user login successful !", token: bearerToken, user: payload.user });
 
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
     }
 });
+
+// READ
+router.get("/profile/:id", jwtVerify, async (req, res) => {
+    try {
+        const id = req.params.id;
+        const existingUser = await user.findOne({ id: id });
+
+        if (!existingUser) return res.status(400).send("user not found");
+
+        const { fname, lname, email, phone, words } = existingUser;
+        res.status(200).send({ fname, lname, email, phone, words });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+
+})
+
+//UPDATE words
+router.patch("/updateWord/:id", jwtVerify, async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (id != req.user) return res.status(400).send("update failed");
+
+        const { word } = req.body;
+
+        const found = await user.findOne({ _id: id, words: { $in: [word] } });
+
+        if (!found) {
+            await user.findOneAndUpdate({ _id: id }, { $addToSet: { words: word } });
+            return res.status(200).send(`${word.title} added successfully`);
+        } else {
+            await user.findOneAndUpdate({ _id: id }, { $pull: { words: word } });
+            return res.status(200).send(`${word.title} removed successfully`);
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+
+})
+
 module.exports = router;
