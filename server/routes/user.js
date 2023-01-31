@@ -64,7 +64,7 @@ router.post("/signin", async (req, res) => {
         }
 
         const id = existingUser.id;
-        const payload = { user: { id, email, fname: existingUser.fname, lname: existingUser.lname } };
+        const payload = { user: { id, email, fname: existingUser.fname, lname: existingUser.lname, words: existingUser.words } };
 
         const bearerToken = jwt.sign({ id }, JWT_SECRET, { expiresIn: '10d' });
         return res.status(200).send({ status: "ok", message: "user login successful !", token: bearerToken, user: payload.user });
@@ -105,11 +105,12 @@ router.patch("/updateWord/:id", jwtVerify, async (req, res) => {
 
         if (!found) {
             await user.findOneAndUpdate({ _id: id }, { $addToSet: { words: word } });
-            return res.status(200).send(`${word.title} added successfully`);
         } else {
             await user.findOneAndUpdate({ _id: id }, { $pull: { words: word } });
-            return res.status(200).send(`${word.title} removed successfully`);
         }
+        const updatedUser = await user.findOne({ _id: id });
+        const { fname, lname, email, phone, words } = updatedUser;
+        res.status(200).send({ fname, lname, email, phone, words });
 
     } catch (error) {
         console.log(error);
