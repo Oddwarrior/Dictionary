@@ -81,10 +81,10 @@ router.get("/profile/:id", jwtVerify, async (req, res) => {
         const id = req.params.id;
         const existingUser = await user.findOne({ id: id });
 
-        if (!existingUser) return res.status(400).send("user not found");
+        if (!existingUser) return res.status(400).send({ error: "user not found" });
 
         const { fname, lname, email, phone, words } = existingUser;
-        res.status(200).send({ fname, lname, email, phone, words });
+        res.status(200).send({ status: "ok", user: { id, fname, lname, email, phone, words } });
 
     } catch (error) {
         console.log(error);
