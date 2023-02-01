@@ -97,7 +97,7 @@ router.get("/profile/:id", jwtVerify, async (req, res) => {
 router.patch("/updateWord/:id", jwtVerify, async (req, res) => {
     try {
         const id = req.params.id;
-        if (id != req.user) return res.status(400).send("update failed");
+        if (id != req.user) return res.status(400).send({ error: "update failed" });
 
         const { word } = req.body;
 
@@ -109,8 +109,8 @@ router.patch("/updateWord/:id", jwtVerify, async (req, res) => {
             await user.findOneAndUpdate({ _id: id }, { $pull: { words: word } });
         }
         const updatedUser = await user.findOne({ _id: id });
-        const { fname, lname, email, phone, words } = updatedUser;
-        res.status(200).send({ fname, lname, email, phone, words });
+        const { words } = updatedUser;
+        res.status(200).send({ status: "ok", words: words });
 
     } catch (error) {
         console.log(error);

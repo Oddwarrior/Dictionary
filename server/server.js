@@ -5,7 +5,10 @@ const cors = require('cors');
 const userRoutes = require('./routes/user');
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PATCH"],
+}));
 
 //signup
 app.use("/user", userRoutes);
