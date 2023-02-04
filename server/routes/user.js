@@ -78,12 +78,13 @@ router.post("/signin", async (req, res) => {
 // READ
 router.get("/profile/:id", jwtVerify, async (req, res) => {
     try {
-        const id = req.params.id;
-        const existingUser = await user.findOne({ id: id });
+        const userId = (req.params.id == "me") ? req.user : req.params.id;
+
+        const existingUser = await user.findOne({ _id: userId });
 
         if (!existingUser) return res.status(400).send({ error: "user not found" });
 
-        const { fname, lname, email, phone, words } = existingUser;
+        const { id, fname, lname, email, phone, words } = existingUser;
         res.status(200).send({ status: "ok", user: { id, fname, lname, email, phone, words } });
 
     } catch (error) {
