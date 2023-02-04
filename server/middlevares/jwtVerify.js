@@ -9,6 +9,7 @@ const jwtVerify = async (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
+            console.log(error);
             return res.status(403).send({ error: err.message });
         }
         else {
